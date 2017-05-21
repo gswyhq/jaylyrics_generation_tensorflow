@@ -19,21 +19,21 @@ date:2016-11-09
 
 common function list:
 
-	describe(func)
-	getAttrs(object,name)
-	setAttrs(object,attrsName,attrsValue)
-	output_to_sequence(lmt,mode='phoneme')
-	target2phoneme(target)
-	logging(model,errorRate,epoch=0,delta_time=0,mode='train')
-	count_params(model,mode='trainable')
-	list_to_sparse_tensor(targetList)
-	get_edit_distance(hyp_arr,truth_arr)
-	data_lists_to_batches(inputList, targetList, batchSize)
-	load_batched_data(specPath, targetPath, batchSize)
-	list_dirs(mfcc_dir,label_dir)
-	build_weight(shape,name=None,func='truncated_normal')
-	build_forward_layer(inpt,shape,kernel='relu',name_scope='fc1')
-	build_conv_layer(inpt,filter_shape,stride,name=None)	
+    describe(func)
+    getAttrs(object,name)
+    setAttrs(object,attrsName,attrsValue)
+    output_to_sequence(lmt,mode='phoneme')
+    target2phoneme(target)
+    logging(model,errorRate,epoch=0,delta_time=0,mode='train')
+    count_params(model,mode='trainable')
+    list_to_sparse_tensor(targetList)
+    get_edit_distance(hyp_arr,truth_arr)
+    data_lists_to_batches(inputList, targetList, batchSize)
+    load_batched_data(specPath, targetPath, batchSize)
+    list_dirs(mfcc_dir,label_dir)
+    build_weight(shape,name=None,func='truncated_normal')
+    build_forward_layer(inpt,shape,kernel='relu',name_scope='fc1')
+    build_conv_layer(inpt,filter_shape,stride,name=None)    
 '''
 import time
 from functools import wraps
@@ -80,17 +80,17 @@ def output_to_sequence(lmt,mode='phoneme'):
     start = 0
     sequences.append([])
     for i in range(len(lmt[0])):
-	if lmt[0][i][0] == start:
-	    sequences[start].append(lmt[1][i])
-	else:
-	    start = start + 1
+        if lmt[0][i][0] == start:
+            sequences[start].append(lmt[1][i])
+        else:
+            start = start + 1
             sequences.append([])
 
     #here, we only print the first sequence of batch
     indexes = sequences[0] #here, we only print the first sequence of batch
     if mode=='phoneme':
-	phn = ['aa', 'ae', 'ah', 'ao', 'aw', 'ax', 'ax-h', 'axr', 'ay', 'b', 'bcl', 'ch', 'd', 'dcl', 'dh', 'dx', 'eh', 'el', 'em', 'en', 'eng', 'epi', 'er', 'ey', 'f', 'g', 'gcl', 'h#', 'hh', 'hv', 'ih', 'ix', 'iy', 'jh', 'k', 'kcl', 'l', 'm', 'n', 'ng', 'nx', 'ow', 'oy', 'p', 'pau', 'pcl', 'q', 'r', 's', 'sh', 't', 'tcl', 'th', 'uh', 'uw', 'ux', 'v', 'w', 'y', 'z', 'zh']
-	seq = []
+        phn = ['aa', 'ae', 'ah', 'ao', 'aw', 'ax', 'ax-h', 'axr', 'ay', 'b', 'bcl', 'ch', 'd', 'dcl', 'dh', 'dx', 'eh', 'el', 'em', 'en', 'eng', 'epi', 'er', 'ey', 'f', 'g', 'gcl', 'h#', 'hh', 'hv', 'ih', 'ix', 'iy', 'jh', 'k', 'kcl', 'l', 'm', 'n', 'ng', 'nx', 'ow', 'oy', 'p', 'pau', 'pcl', 'q', 'r', 's', 'sh', 't', 'tcl', 'th', 'uh', 'uw', 'ux', 'v', 'w', 'y', 'z', 'zh']
+        seq = []
         for ind in indexes:
             if ind==len(phn):
                 pass
@@ -98,29 +98,29 @@ def output_to_sequence(lmt,mode='phoneme'):
                 seq.append(phn[ind])
         seq = ' '.join(seq)
         return seq
-	
+    
     elif mode=='character':
         seq = []
         for ind in indexes:
             if ind==0:
                 seq.append(' ')
             elif ind==27:
-	        pass
+                pass
             else:
                 seq.append(chr(ind+96))
         seq = ''.join(seq)
         return seq
     else:
-	raise TypeError('mode should be phoneme or character')
+        raise TypeError('mode should be phoneme or character')
 
 def target2phoneme(target):
     phn = ['aa', 'ae', 'ah', 'ao', 'aw', 'ax', 'ax-h', 'axr', 'ay', 'b', 'bcl', 'ch', 'd', 'dcl', 'dh', 'dx', 'eh', 'el', 'em', 'en', 'eng', 'epi', 'er', 'ey', 'f', 'g', 'gcl', 'h#', 'hh', 'hv', 'ih', 'ix', 'iy', 'jh', 'k', 'kcl', 'l', 'm', 'n', 'ng', 'nx', 'ow', 'oy', 'p', 'pau', 'pcl', 'q', 'r', 's', 'sh', 't', 'tcl', 'th', 'uh', 'uw', 'ux', 'v', 'w', 'y', 'z', 'zh']
     seq = []
     for t in target:
-	if t==len(phn):
-	    pass
-	else:
-	    seq.append(phn[t])
+        if t==len(phn):
+            pass
+        else:
+            seq.append(phn[t])
     seq = ' '.join(seq)
     return seq
 
@@ -129,22 +129,22 @@ def logging(model,errorRate,epoch=0,delta_time=0,mode='train'):
     ''' log the cost and error rate and time while training or testing
     '''
     if mode != 'train' and mode!='test' and mode!='config':
-	raise TypeError('mode should be train or test or config.')
+        raise TypeError('mode should be train or test or config.')
     logfile = model.logfile
     if mode == 'config':
-	with open(logfile, "a") as myfile:
-            myfile.write(str(model.config)+'\n')
+        with open(logfile, "a") as myfile:
+                myfile.write(str(model.config)+'\n')
     elif mode == 'train':
         with open(logfile, "a") as myfile:
-	    myfile.write(str(time.strftime('%X %x %Z'))+'\n')
-    	    myfile.write("Epoch:"+str(epoch+1)+' '+"train error rate:"+str(errorRate)+'\n')
-    	    myfile.write("Epoch:"+str(epoch+1)+' '+"train time:"+str(delta_time)+' s\n')
+            myfile.write(str(time.strftime('%X %x %Z'))+'\n')
+            myfile.write("Epoch:"+str(epoch+1)+' '+"train error rate:"+str(errorRate)+'\n')
+            myfile.write("Epoch:"+str(epoch+1)+' '+"train time:"+str(delta_time)+' s\n')
     elif mode == 'test':
         logfile = logfile+'_TEST'
         with open(logfile, "a") as myfile:
             myfile.write(str(model.config)+'\n')
-	    myfile.write(str(time.strftime('%X %x %Z'))+'\n')
-    	    myfile.write("test error rate:"+str(errorRate)+'\n')
+            myfile.write(str(time.strftime('%X %x %Z'))+'\n')
+            myfile.write("test error rate:"+str(errorRate)+'\n')
 
 @describe
 def count_params(model,mode='trainable'):
@@ -155,7 +155,7 @@ def count_params(model,mode='trainable'):
     elif mode == 'trainable':
         num = np.sum([np.product([xi.value for xi in x.get_shape()]) for x in model.var_trainable_op])
     else:
-	raise TypeError('mode should be all or trainable.')
+        raise TypeError('mode should be all or trainable.')
     print('number of '+mode+' parameters: '+str(num))
     return num
 
@@ -196,7 +196,7 @@ def data_lists_to_batches(inputList, targetList, batchSize):
     nFeatures = inputList[0].shape[0]
     maxLength = 0
     for inp in inputList:
-	# find the max time_length
+    # find the max time_length
         maxLength = max(maxLength, inp.shape[1])
     # randIxs is the shuffled index from range(0,len(inputList)) 
     randIxs = np.random.permutation(len(inputList))
@@ -204,20 +204,20 @@ def data_lists_to_batches(inputList, targetList, batchSize):
     dataBatches = []
 
     while end <= len(inputList):
-	# batchSeqLengths store the time-length of each sample in a mini-batch
+    # batchSeqLengths store the time-length of each sample in a mini-batch
         batchSeqLengths = np.zeros(batchSize)
-  	# randIxs is the shuffled index of input list
-	for batchI, origI in enumerate(randIxs[start:end]):
-            batchSeqLengths[batchI] = inputList[origI].shape[-1]
+      # randIxs is the shuffled index of input list
+    for batchI, origI in enumerate(randIxs[start:end]):
+        batchSeqLengths[batchI] = inputList[origI].shape[-1]
 
         batchInputs = np.zeros((maxLength, batchSize, nFeatures))
         batchTargetList = []
         for batchI, origI in enumerate(randIxs[start:end]):
-	    # padSecs is the length of padding  
+        # padSecs is the length of padding  
             padSecs = maxLength - inputList[origI].shape[1]
-	    # numpy.pad pad the inputList[origI] with zeos at the tail
+        # numpy.pad pad the inputList[origI] with zeos at the tail
             batchInputs[:,batchI,:] = np.pad(inputList[origI].T, ((0,padSecs),(0,0)), 'constant', constant_values=0)
-	    # target label
+        # target label
             batchTargetList.append(targetList[origI])
         dataBatches.append((batchInputs, list_to_sparse_tensor(batchTargetList), batchSeqLengths))
         start += batchSize
@@ -237,23 +237,23 @@ def list_dirs(mfcc_dir,label_dir):
     mfcc_dirs = glob(mfcc_dir)
     label_dirs = glob(label_dir)
     for mfcc,label in zip(mfcc_dirs,label_dirs):
-	yield (mfcc,label)
+        yield (mfcc,label)
 
 def build_weight(shape,name=None,func='truncated_normal'):
     if type(shape) is not list:
-	raise TypeError('shape must be a list')
+        raise TypeError('shape must be a list')
     if func == 'truncated_normal':
-	return tf.Variable(tf.truncated_normal(shape,stddev=0.1,dtype=tf.float32,name = name))
+        return tf.Variable(tf.truncated_normal(shape,stddev=0.1,dtype=tf.float32,name = name))
 
 def build_forward_layer(inpt,shape,kernel='relu',name_scope='fc1'):
     fc_w = build_weight(shape,name=name_scope+'_w')
     fc_b = build_weight([shape[1]],name=name_scope+'_b')
     if kernel == 'relu':
-	fc_h = tf.nn.relu(tf.matmul(inpt,fc_w) + fc_b)
+        fc_h = tf.nn.relu(tf.matmul(inpt,fc_w) + fc_b)
     elif kernel == 'elu':
-	fc_h = tf.nn.elu(tf.matmul(inpt,fc_w) + fc_b)
+        fc_h = tf.nn.elu(tf.matmul(inpt,fc_w) + fc_b)
     elif kernel == 'linear':
-	fc_h = tf.matmul(inpt,fc_w) + fc_b
+        fc_h = tf.matmul(inpt,fc_w) + fc_b
     return fc_h
 
 def build_conv_layer(inpt,filter_shape,stride,name=None):
@@ -264,11 +264,11 @@ def build_conv_layer(inpt,filter_shape,stride,name=None):
     beta = tf.Variable(tf.zeros([in_channels]), name="beta")
     gamma = build_weight([in_channels], name="gamma")
     batch_norm = tf.nn.batch_normalization(
-    				inpt, 
-				mean, var, 
-				beta, gamma, 
-				0.001,
-				name=name+'_bn')
+                    inpt, 
+                mean, var, 
+                beta, gamma, 
+                0.001,
+                name=name+'_bn')
     # 2.relu
     activated = tf.nn.relu(batch_norm)
     # 3.convolution
@@ -278,6 +278,20 @@ def build_conv_layer(inpt,filter_shape,stride,name=None):
     return output
 
 def random_pick(p,word,sampling_type):
+    """
+    种子序列运行完毕以后，接下来就进入真正的抽样过程了，即拿上一时刻的state以及上一时刻输出probs中的最佳单词作为下一时刻的输入，
+    那么给定了一个所有单词的概率分布probs，该时刻的最佳单词如何定义呢？这里我列举了三种情况：
+    argmax型：即找出probs中最大值所对应的索引，然后去单词表中找到该索引对应的单词即为最佳单词；
+    weighted型：即随机取样，其工作流程如下：首先，计算此probs的累加总和S；其次，随机生成一个0~1之间的随机数，
+    并将其与probs的总和相乘得到R；最后，将R依次减去probs中每个数，直到R变成负数的那个probs的索引，即为我们要挑选的最佳单词；
+    combined型： 这里我把argmax和weighted结合起来了，即每次遇到一个空格（相当于一句歌词的结尾），
+    就使用weighted型，而其他时候都使用argmax型；
+
+    :param p:
+    :param word:
+    :param sampling_type:
+    :return:
+    """
     def weighted_pick(weights):
         t = np.cumsum(weights)
         s = np.sum(weights)
@@ -291,12 +305,12 @@ def random_pick(p,word,sampling_type):
         if word == ' ':
             sample = weighted_pick(p)
         else:
-    	    sample = np.argmax(p)
+            sample = np.argmax(p)
     return sample
     
 
 # test code
 if __name__=='__main__':
     for (mfcc,label) in list_dirs('/home/pony/github/data/label/*/','/home/pony/github/data/mfcc/*/'):
-	print mfcc
-	print label
+        print (mfcc)
+        print (label)
